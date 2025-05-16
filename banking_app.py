@@ -2,7 +2,7 @@
 import os
 import random
 import datetime
-
+from datetime  import datetime
 
 USER_FILE = "User.txt"
 CUSTOMER_FILE = "Customer.txt"
@@ -14,7 +14,15 @@ TRANSACTION_HISTORY_FILE ="Transaction_History.txt"
 
 def create_account():
     print("📜======Customer Creation=====📜")
-    customer_name = input("Enter your name:")
+    try:
+        customer_name = input("Enter your name:")
+        if customer_name in USER_FILE is true:
+            print(f"❌ User name already taken.Try another.")
+        else:
+            print(f"✅Username added successful!.")
+            
+    except ValueError:
+        print("❌Enter the letters only!")
     customer_address = input("Enter your address:") 
     customer_phone_no = int(input("Enter your phone number:"))
     intial_balances = float(input("Enter the intial balance:$"))
@@ -23,73 +31,26 @@ def create_account():
 
     
     
+
 # ============================================================================================
-#  Function for read file ====================================================================
+def file_creation():
 
-def read_user(CUSTOMER_FILE):
-    accounts = {}
-    with open("User.txt", "r") as user_info:
-        for line in user_info:
-            parts = line.strip().split("  ")
-            acc_no = parts[0] 
-            initial_balances = float(parts[-1])
-            customer_name = "".join(parts[1:-1])
-            return accounts
-    
+    acc_no = auto_account_number(CUSTOMER_FILE)
+    u_id = user_id(CUSTOMER_FILE)
+    c_id = customer_id(CUSTOMER_FILE)
 
-#     except FileNotFoundError:
-#         return[]
-        
-        
+    with open("User.txt", "w") as user_info:
+        user_info.write(f"{acc_no}  {u_id}   {account_creation[0]}   {account_creation[1]}   {account_creation[2]}   {account_creation[4]}\n")
 
-# def read_customer():
-#     try:
-#         with open("Customer.txt", "r") as customer_info:
-#            lines = customer_info.readlines()
-#         return lines
+    with open("Customer.txt", "w") as customer_info:
+        customer_info.write(f"{acc_no}  {c_id}   {account_creation[3]}\n")
 
-#     except FileNotFoundError:
-#         return[] 
-        
-
-
-# def read_account():
-#     try:
-#         with open("Account.txt", "r") as account_info:
-#             lines = acconut_info.readlines()
-#         return lines
-
-#     except FileNotFoundError:
-#         return[]
-        
-        
-# =================================================================================================================== 
-
-# Fuction for Auto account number creation==========================================================================
-
-def auto_account_number():
-    return str(random.randint(2000, 12000))
-    
-
-def customer_id():
-    existing = read_customer()
-    return f"C_{3000 + len(existing) + 1}"
-    
-
-def user_id():
-    existing = read_user()
-    return f"U_{5000 + len(existing) + 1}"
-    
-# Banking Files====================================================================================================
-
-def file_creation(account_creation):
-
-    acc_no = auto_account_number()
-    u_id = user_id()
-    c_id = customer_id()
+    with open ("Account.txt","w") as acconut_info:
+        acconut_info.write(f"{acc_no}   {account_creation[3]} \n")
 
     with open("User.txt", "a") as user_info:
         user_info.write(f"{acc_no}  {u_id}   {account_creation[0]}   {account_creation[1]}   {account_creation[2]}   {account_creation[4]}\n")
+
 
     with open("Customer.txt", "a") as customer_info:
         customer_info.write(f"{acc_no}  {c_id}   {account_creation[3]}\n")
@@ -100,7 +61,60 @@ def file_creation(account_creation):
     # with open ("Transaction_History.txt","w") as transaction_info:
     #     transaction_info.write(f"{account_creation[]}")
     
+#  Function for read file ====================================================================
+
+# def read_user(USER_FILE):
+#     accounts = {}
+#     with open("User.txt", "r") as user_info:
+#         for line in user_info:
+#             parts = line.strip().split("  ")
+#             acc_no = parts[0] 
+#             initial_balances = float(parts[-1])
+#             customer_name = "".join(parts[1:-1])
+#             return accounts        
+
+def read_customer():
+    try:
+        with open("Customer.txt", "r") as customer_info:
+           lines = customer_info.readlines()
+        return lines
+
+    except FileNotFoundError:
+        return[] 
+        
+
+
+def read_account():
+    try:
+        with open("Account.txt", "r") as account_info:
+            lines = acconut_info.readlines()
+        return lines
+
+    except FileNotFoundError:
+        return[]
+        
+        
+# =================================================================================================================== 
+
     
+# Fuction for Auto account number creation==========================================================================
+
+def auto_account_number(CUSTOMER_FILE):
+    return str(random.randint(1000, 9999))
+    
+
+def customer_id(CUSTOMER_FILE):
+    existing = read_customer(CUSTOMER_FILE)
+    return f"C_{3000 + len(existing) + 1}"
+    
+
+def user_id(CUSTOMER_FILE):
+    existing = read_user(CUSTOMER_FILE)
+    return f"U_{5000 + len(existing) + 1}"
+    
+# Banking Files====================================================================================================
+
+
 
 
 
@@ -191,6 +205,12 @@ def view_transactions(TRANSACTION_HISTORY_FILE):
     
     except FileNotFoundError:
         print("❌Transaction history file not found")
+
+def show_current_date():
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    print(f"Current Date :{current_date}")
+
+
     
     
 # =============================================================================================================================
@@ -227,7 +247,7 @@ def admin_login():
 
 
 #ATM MENU ===========================================================================
-def admin_atm_menu(choice):
+def admin_atm_menu():
 
     while True:
 
@@ -239,11 +259,12 @@ def admin_atm_menu(choice):
         print("5.Transcation History")
         print("6.Exit")
         
+        
         choice = input("👉Enter Your choice(1-5):")
 
         if choice == "1":
             account_creation = create_account()
-            file_creation(account_creation)
+            file_creation()
             print("✅Account Creation Success full!")
             
         elif choice == "2":
@@ -264,8 +285,7 @@ def admin_atm_menu(choice):
             acc_num = input("Enter your Account_no:")
             add_transaction(TRANSACTION_HISTORY_FILE, 1, 100.50, "Deposit")
             view_transactions(TRANSACTION_HISTORY_FILE)
-            
-
+        
         elif choice == "6":
             print("Thank you for using this mini banking system.Good bye.!😊.")
             exit()
@@ -284,51 +304,47 @@ def users_login():
     print("📜=====Users Login======📜")
     user_name = input("🙋Enter the users_name:")
     user_id = input("🙋Enter your user id :")
-    while True:
-        if user_name == correct_user_name and user_id == correct_user_id:
-            print('✅Users login success full.')
-            break
-
-        else:
-            exit()
+    
 
 #============================================================================================
 
 
 # ATM MENU ===================================================================================
-def Users_atm_menu(num):
-    while True:
-        print("🏧====ATM MENU====🏧")
-        print("1.Deposit Money")
-        print("2.Withdraw Money")
-        print("3.Check Balance")
-        print("4.Transcation History")
-        print("5.Exit")
+def Users_atm_menu():
+     while True:
+         print("🏧====ATM MENU====🏧")
+         print("1.Deposit Money")
+         print("2.Withdraw Money")
+         print("3.Check Balance")
+         print("4.Transcation History")
+         print("5.Show current time ")          
+         print("6.Exit")
 
-        choice = input("👉Enter Your choice(1-5):")
+         choice = input("👉Enter Your choice(1-5):")
 
-        if choice == "1":
-            deposit_money()
-
-
-        elif choice == "2":
-            withdraw_money(5001)
-
-        elif choice == "3":
-            check_balance()
-
-        elif choice =="4":
-            add_transaction(TRANSACTION_HISTORY_FILE, 1, 100.50, "Deposit")
-            view_transactions(TRANSACTION_HISTORY_FILE)
+         if choice == "1":
+             deposit_money()
 
 
+         elif choice == "2":
+             withdraw_money(5001)
 
-        elif choice == "5":
-            print("Thank you for using this mini banking system.Good Bye.!😊.")
-            exit()
-            break
-        else:
-            print("❌Enter the one to five numbers only!.")
+         elif choice == "3":
+             check_balance()
+
+         elif choice =="4":
+             add_transaction(TRANSACTION_HISTORY_FILE, 1, 100.50, "Deposit")
+             view_transactions(TRANSACTION_HISTORY_FILE)
+
+         elif choice =="5":
+            show_current_date()      
+
+         elif choice == "6":
+             print("Thank you for using this mini banking system.Good Bye.!😊.")
+             exit()
+             break
+         else:
+             print("❌Enter the one to five numbers only!.")
 
 
 
@@ -345,7 +361,7 @@ while True:
 
     if choice == '1':
         admin_login()
-        admin_atm_menu(choice)
+        admin_atm_menu()
 
     elif choice == '2':
         users_login()

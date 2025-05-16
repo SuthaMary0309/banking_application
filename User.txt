@@ -1,6 +1,0 @@
-11489  U_5001   Maryloodsika   Jaffna   767734889   200650901670
-5166  U_5002   Sutha   Kaddaikkadu   771234567   1975678321
-3927  U_5003   Sanloosiya   Manipay   776720036   200345637383
-10766  U_5004   m   m   8   6
-11548  U_5005   w   w   2   2
-10509  U_5006   Mary   Jaffna   9999   565656565
